@@ -1,5 +1,7 @@
 # KnowledgeEditor (this repository is a work in progress!)
 
+Code for Editing Factual Knowledge in Language Models (https://arxiv.org/abs/2104.08164).
+
 ```bibtex
 @inproceedings{decao2020editing,
   title={Editing Factual Knowledge in Language Models}, 
