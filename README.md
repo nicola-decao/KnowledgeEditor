@@ -1,4 +1,4 @@
-# KnowledgeEditor
+# KnowledgeEditor (this repository is a work in progress!)
 
 ```bibtex
 @inproceedings{decao2020editing,
