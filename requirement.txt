@@ -1,0 +1,6 @@
+torch>=1.7
+pytorch_lightning>=1.2
+transformers>=4.1
+jsonlines
+higher
+allennlp
