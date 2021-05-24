@@ -48,8 +48,8 @@ class BartSeq2Seq(LightningModule):
             self.hparams.model_name
         )
 
-        self.train_acc = pl.metrics.Accuracy(threshold=0)
-        self.valid_acc = pl.metrics.Accuracy(threshold=0)
+        self.train_acc = pl.metrics.Accuracy()
+        self.valid_acc = pl.metrics.Accuracy()
 
     def train_dataloader(self, shuffle=True):
         if not hasattr(self, "train_dataset"):

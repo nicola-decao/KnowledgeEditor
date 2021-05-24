@@ -48,7 +48,7 @@ class BartSeq2SeqAugmented(LightningModule):
         parser.add_argument(
             "--model_checkpoint",
             type=str,
-            default="models/bart_seq2seq_structured_zeroshot/version_0/checkpoints/model-epoch=17-valid_acc=0.2207.ckpt",
+            default="models/QA_model.ckpt",
         )
 
         parser.add_argument("--margin_kl_max", type=float, default=1e-3)
@@ -105,9 +105,9 @@ class BartSeq2SeqAugmented(LightningModule):
         self.alpha_lp = torch.nn.Parameter(torch.ones(()))
         self.alpha_lp.register_hook(lambda grad: -grad)
 
-        self.train_acc = pl.metrics.Accuracy(threshold=0)
-        self.valid_acc = pl.metrics.Accuracy(threshold=0)
-        self.valid_flipped = pl.metrics.Accuracy(threshold=0)
+        self.train_acc = pl.metrics.Accuracy()
+        self.valid_acc = pl.metrics.Accuracy()
+        self.valid_flipped = pl.metrics.Accuracy()
 
         self.register_buffer("margin_kl", torch.tensor(self.hparams.margin_kl_max))
         self.register_buffer("margin_lp", torch.tensor(self.hparams.margin_lp_max))

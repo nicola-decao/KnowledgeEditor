@@ -51,8 +51,8 @@ class BertBinary(LightningModule):
         self.tokenizer = BertTokenizer.from_pretrained(self.hparams.model_name)
         self.model = BertClassifier(self.hparams.model_name)
 
-        self.train_acc = pl.metrics.Accuracy(threshold=0)
-        self.valid_acc = pl.metrics.Accuracy(threshold=0)
+        self.train_acc = pl.metrics.Accuracy()
+        self.valid_acc = pl.metrics.Accuracy()
 
     def train_dataloader(self, shuffle=True):
         if not hasattr(self, "train_dataset"):

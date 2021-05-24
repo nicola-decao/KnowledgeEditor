@@ -103,9 +103,9 @@ class BertBinaryAugmented(LightningModule):
         self.alpha_l2 = torch.nn.Parameter(torch.ones(()))
         self.alpha_l2.register_hook(lambda grad: -grad)
 
-        self.train_acc = pl.metrics.Accuracy(threshold=0)
-        self.valid_acc = pl.metrics.Accuracy(threshold=0)
-        self.valid_flipped = pl.metrics.Accuracy(threshold=0)
+        self.train_acc = pl.metrics.Accuracy()
+        self.valid_acc = pl.metrics.Accuracy()
+        self.valid_flipped = pl.metrics.Accuracy()
 
         self.register_buffer("margin_kl", torch.tensor(self.hparams.margin_kl_max))
         self.register_buffer("margin_l2", torch.tensor(self.hparams.margin_l2_max))
