@@ -44,7 +44,7 @@ class BertBinaryAugmented(LightningModule):
         parser.add_argument(
             "--model_checkpoint",
             type=str,
-            default="models/bert_binary_fever/version_0/checkpoints/model-epoch=02-valid_acc=0.7708.ckpt",
+            default="models/FC_model.ckpt",
         )
 
         parser.add_argument("--margin_kl_max", type=float, default=1e-1)
@@ -100,8 +100,8 @@ class BertBinaryAugmented(LightningModule):
         self.alpha_kl = torch.nn.Parameter(torch.ones(()))
         self.alpha_kl.register_hook(lambda grad: -grad)
 
-        self.alpha_l2 = torch.nn.Parameter(torch.ones(()))
-        self.alpha_l2.register_hook(lambda grad: -grad)
+        self.alpha_lp = torch.nn.Parameter(torch.ones(()))
+        self.alpha_lp.register_hook(lambda grad: -grad)
 
         self.train_acc = pl.metrics.Accuracy()
         self.valid_acc = pl.metrics.Accuracy()
