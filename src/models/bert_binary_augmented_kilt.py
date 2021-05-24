@@ -108,7 +108,7 @@ class BertBinaryAugmented(LightningModule):
         self.valid_flipped = pl.metrics.Accuracy()
 
         self.register_buffer("margin_kl", torch.tensor(self.hparams.margin_kl_max))
-        self.register_buffer("margin_l2", torch.tensor(self.hparams.margin_l2_max))
+        self.register_buffer("margin_lp", torch.tensor(self.hparams.margin_lp_max))
         self.running_flipped = []
 
     def train_dataloader(self, shuffle=True):
