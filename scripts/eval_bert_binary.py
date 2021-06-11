@@ -248,7 +248,8 @@ if __name__ == "__main__":
                 logits_orig,
                 params_dict,
                 stop_condition=lambda condition, logits, n_iter: (
-                    not("REFUTES >> SUPPORTS" in condition and logits[-1] > 0)
+                    ("REFUTES >> SUPPORTS" in condition and logits[-1] < 0) 
+                    or ("SUPPORTS >> REFUTES" in condition and logits[-1] > 0)
                 ) and n_iter < 5,
             )
             
