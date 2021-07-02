@@ -1,4 +1,4 @@
-# KnowledgeEditor (this repository is a work in progress!)
+# KnowledgeEditor
 
 Code for Editing Factual Knowledge in Language Models (https://arxiv.org/abs/2104.08164).
 
