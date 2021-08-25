@@ -172,7 +172,8 @@ class BartSeq2SeqAugmented(LightningModule):
                         if self.hparams.use_views
                         else -1 : -1
                         if self.hparams.use_views
-                        else None, 1:
+                        else None,
+                        1:,
                     ],
                     epsilon=self.hparams.eps,
                     ignore_index=self.tokenizer.pad_token_id,
@@ -182,7 +183,8 @@ class BartSeq2SeqAugmented(LightningModule):
                     if self.hparams.use_views
                     else -1 : -1
                     if self.hparams.use_views
-                    else None, 1:
+                    else None,
+                    1:,
                 ].sum(),
                 self.model.parameters(),
             )
@@ -324,7 +326,14 @@ class BartSeq2SeqAugmented(LightningModule):
             prog_bar=True,
         )
 
-    def sample(self, sentences, condition, params_dict=None, num_return_sequences=1, stop_condition=None):
+    def sample(
+        self,
+        sentences,
+        condition,
+        params_dict=None,
+        num_return_sequences=1,
+        stop_condition=None,
+    ):
         len_sent = len(sentences)
         with torch.no_grad():
             batch = {
@@ -356,16 +365,16 @@ class BartSeq2SeqAugmented(LightningModule):
                     num_return_sequences,
                 )
             )
-            
+
             n_iter = 1
             if stop_condition is not None and stop_condition(condition, guess, n_iter):
                 model_tmp = deepcopy(self.model)
-                params_dict_tmp =  deepcopy(params_dict)
-                
+                params_dict_tmp = deepcopy(params_dict)
+
                 while stop_condition(condition, guess, n_iter):
                     for n, p in self.model.named_parameters():
                         p.data += params_dict.get(n, 0)
-                        
+
                     guess = list(
                         batch_it(
                             self.tokenizer.batch_decode(
@@ -385,10 +394,12 @@ class BartSeq2SeqAugmented(LightningModule):
                             num_return_sequences,
                         )
                     )
-                        
-                    params_dict_tmp = {k: v + params_dict[k] for k, v in params_dict_tmp.items()}
+
+                    params_dict_tmp = {
+                        k: v + params_dict[k] for k, v in params_dict_tmp.items()
+                    }
                     n_iter += 1
-                
+
                 self.model = model_tmp
                 params_dict = params_dict_tmp
 

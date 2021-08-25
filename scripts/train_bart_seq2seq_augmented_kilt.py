@@ -33,6 +33,7 @@ if __name__ == "__main__":
     callbacks = [
         ModelCheckpoint(
             monitor="valid_acc",
+            mode="max",
             dirpath=os.path.join(logger.log_dir, "checkpoints"),
             save_top_k=args.save_top_k,
             filename="model-{epoch:02d}-{valid_acc:.4f}-{valid_flipped:4f}",
@@ -47,4 +48,3 @@ if __name__ == "__main__":
     model = BartSeq2SeqAugmented(**vars(args))
 
     trainer.fit(model)
-

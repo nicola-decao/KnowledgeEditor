@@ -91,7 +91,7 @@ class BartSeq2Seq(LightningModule):
             decoder_attention_mask=batch["trg_attention_mask"][:, :-1],
             use_cache=False,
         ).logits
-    
+
     def training_step(self, batch, batch_idx=None):
         logits = self.forward(batch)
 

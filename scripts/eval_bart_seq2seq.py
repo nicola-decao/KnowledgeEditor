@@ -84,9 +84,9 @@ if __name__ == "__main__":
     )
 
     if args.method == "baseline":
-        
+
         model = BartSeq2Seq.load_from_checkpoint(args.model).to(args.device)
-        
+
         val_dataset0 = Seq2SeqAugmentedKILT(
             tokenizer=model.tokenizer,
             data_path=model.hparams.dev_data_path,
@@ -113,7 +113,7 @@ if __name__ == "__main__":
 
         for j, d0 in iter_:
             all_alts[j] = d0["alt"]
-            
+
             tmodel = deepcopy(model)
             optimizer = torch.optim.RMSprop(
                 [
@@ -150,7 +150,7 @@ if __name__ == "__main__":
                 logits = tmodel(batch)
                 _, loss = label_smoothed_nll_loss(
                     logits.log_softmax(-1),
-                    batch["trg_input_ids"][:,1:],
+                    batch["trg_input_ids"][:, 1:],
                     epsilon=0,
                     ignore_index=model.tokenizer.pad_token_id,
                 )
@@ -162,8 +162,10 @@ if __name__ == "__main__":
 
             all_guess_batch = []
             for i, d1 in enumerate(batch_it(tqdm(val_dataset1), args.batch_size)):
-                all_guess_batch += tmodel.sample([e["src"] for e in d1], num_return_sequences=5)
-        
+                all_guess_batch += tmodel.sample(
+                    [e["src"] for e in d1], num_return_sequences=5
+                )
+
             all_guess[j] = all_guess_batch
 
             iter_.set_postfix(
@@ -190,16 +192,18 @@ if __name__ == "__main__":
                 )
                 / len(all_rephrases),
             )
-            
+
         filename = os.path.join(
-            args.output_path, f"all_guess-{args.from_idx}-{args.to_idx}-baseline-{args.layer}.pkl"
+            args.output_path,
+            f"all_guess-{args.from_idx}-{args.to_idx}-baseline-{args.layer}.pkl",
         )
         logging.info("Saving {}".format(filename))
         with open(filename, "wb") as f:
             pickle.dump(all_guess, f)
 
         filename = os.path.join(
-            args.output_path, f"all_rephrases-{args.from_idx}-{args.to_idx}-baseline-{args.layer}.pkl"
+            args.output_path,
+            f"all_rephrases-{args.from_idx}-{args.to_idx}-baseline-{args.layer}.pkl",
         )
         logging.info("Saving {}".format(filename))
         with open(filename, "wb") as f:
@@ -254,8 +258,10 @@ if __name__ == "__main__":
                 params_dict,
                 num_return_sequences=5,
                 stop_condition=lambda condition, guess, n_iter: (
-                    normalize(condition.split(" || ")[0].split(" >> ")[1]) != normalize(guess[0][0])
-                ) and n_iter < 5,
+                    normalize(condition.split(" || ")[0].split(" >> ")[1])
+                    != normalize(guess[0][0])
+                )
+                and n_iter < 5,
             )
 
             all_rephrases[j] = guess

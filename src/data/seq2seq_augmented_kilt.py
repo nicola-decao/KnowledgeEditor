@@ -45,7 +45,7 @@ class Seq2SeqAugmentedKILT(Dataset):
             "src": self.data[item]["input"],
             "pred": self.data[item]["prediction"],
             "alt": alt,
-            "answers":  [x["answer"] for x in self.data[item]["output"]],
+            "answers": [x["answer"] for x in self.data[item]["output"]],
             "cond": "{} >> {} || {}".format(
                 self.data[item]["prediction"],
                 alt,

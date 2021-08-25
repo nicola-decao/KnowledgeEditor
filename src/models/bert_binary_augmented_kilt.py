@@ -271,7 +271,14 @@ class BertBinaryAugmented(LightningModule):
             prog_bar=True,
         )
 
-    def sample(self, sentences, condition, logits_orig=None, params_dict=None, stop_condition=None):
+    def sample(
+        self,
+        sentences,
+        condition,
+        logits_orig=None,
+        params_dict=None,
+        stop_condition=None,
+    ):
         len_sent = len(sentences)
         with torch.no_grad():
             logits_orig, logits, params_dict = self.forward(
@@ -282,12 +289,12 @@ class BertBinaryAugmented(LightningModule):
                 logits_orig=logits_orig,
                 params_dict=params_dict,
             )
-            
+
             n_iter = 1
             if stop_condition is not None and stop_condition(condition, logits, n_iter):
                 model_tmp = deepcopy(self.model)
-                params_dict_tmp =  deepcopy(params_dict)
-                
+                params_dict_tmp = deepcopy(params_dict)
+
                 while stop_condition(condition, logits, n_iter):
                     for n, p in self.model.named_parameters():
                         p.data += params_dict.get(n, 0)
@@ -295,15 +302,19 @@ class BertBinaryAugmented(LightningModule):
                     _, logits, params_dict = self.forward(
                         {
                             k: v.to(self.device)
-                            for k, v in self.val_dataset.get_batch(sentences, condition).items()
+                            for k, v in self.val_dataset.get_batch(
+                                sentences, condition
+                            ).items()
                         }
                     )
-                    params_dict_tmp = {k: v + params_dict[k] for k, v in params_dict_tmp.items()}
+                    params_dict_tmp = {
+                        k: v + params_dict[k] for k, v in params_dict_tmp.items()
+                    }
                     n_iter += 1
-                
+
                 self.model = model_tmp
                 params_dict = params_dict_tmp
-            
+
             return logits_orig, logits[:len_sent], params_dict
 
     def on_before_zero_grad(self, optimizer):
