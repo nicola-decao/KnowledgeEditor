@@ -254,14 +254,14 @@ class BertBinaryAugmented(LightningModule):
 
         logits_orig, logits, params_dict = self.forward(batch)
 
-        self.valid_acc(logits, batch["labels"])
+        self.valid_acc(logits.sigmoid(), batch["labels"].long())
         self.log(
             "valid_acc", self.valid_acc, on_step=False, on_epoch=True, prog_bar=True
         )
 
         self.valid_flipped(
-            logits[-2 if self.hparams.use_views else -1 :],
-            batch["labels"][-2 if self.hparams.use_views else -1 :],
+            logits[-2 if self.hparams.use_views else -1 :].sigmoid(),
+            batch["labels"][-2 if self.hparams.use_views else -1 :].long(),
         )
         self.log(
             "valid_flipped",

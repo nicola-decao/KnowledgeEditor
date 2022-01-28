@@ -103,7 +103,7 @@ class BertBinary(LightningModule):
 
         self.log("cr", cr, on_step=True, on_epoch=False, prog_bar=True)
         self.log("entropy", entropy, on_step=True, on_epoch=False, prog_bar=True)
-        self.train_acc(logits, batch["labels"])
+        self.train_acc(logits.sigmoid(), batch["labels"].long())
         self.log(
             "train_acc", self.train_acc, on_step=True, on_epoch=False, prog_bar=True
         )
@@ -116,7 +116,7 @@ class BertBinary(LightningModule):
             attention_mask=batch["src_attention_mask"],
         )
 
-        self.valid_acc(logits, batch["labels"])
+        self.valid_acc(logits.sigmoid(), batch["labels"].long())
         self.log(
             "valid_acc", self.valid_acc, on_step=False, on_epoch=True, prog_bar=True
         )
